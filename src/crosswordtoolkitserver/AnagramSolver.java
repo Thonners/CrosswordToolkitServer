@@ -17,14 +17,12 @@
 package crosswordtoolkitserver;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
 
 /**
  * Class to solve an anagram, using the same word-list and algorithm as the app
@@ -90,8 +88,17 @@ public class AnagramSolver {
         return String.valueOf(letters);
     }
     
-    private void solveAnagrams(String inputString){
+    /**
+     * Method to solve the anagram. 
+     * @param inputString The string to be anagrammed
+     * @return An ArrayList<String> of the solutions to the anagram, shoud any exist, otherwise returns null.
+     */
+    public ArrayList<String> solveAnagram(String inputString){
         String sortedInputString = sortLetters(inputString) ;
-        
+        if (dictionary.containsKey(sortedInputString)) {
+            return dictionary.get(sortedInputString) ;
+        } else {
+            return null ;
+        }
     }
 }

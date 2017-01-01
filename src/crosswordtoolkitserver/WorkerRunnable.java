@@ -20,6 +20,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Runnable class to deal with an incoming socket connection
@@ -31,18 +32,24 @@ public class WorkerRunnable implements Runnable {
     
     protected Socket clientSocket = null;
     
+    private DataInputStream dIn = null ;
+    private DataOutputStream dOut = null ;
+    
     public WorkerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket ;
     }
     
     @Override
     public void run() {
-        try {
-            processClientRequest();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (clientSocket != null) {
+            try {
+                processClientRequest();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Error: Can't process client requet, since clientSocket == null.");
         }
-        
     }
 
     /**
@@ -55,20 +62,35 @@ public class WorkerRunnable implements Runnable {
         logConnection();
         System.out.println("This server has been connected to " + " times.");
         // Input / Output data streams
-        DataInputStream dIn = new DataInputStream(clientSocket.getInputStream());
-        DataOutputStream dOut = new DataOutputStream(clientSocket.getOutputStream()) ;
+        dIn = new DataInputStream(clientSocket.getInputStream());
+        dOut = new DataOutputStream(clientSocket.getOutputStream()) ;
         
         boolean done = false;
         while(!done) {
             byte messageType = dIn.readByte();
 
             switch(messageType) {
-                // TODO: Implement framework to deal with incoming connections
-                case -1: //Client is a receive type client, and is therefore only after data
-                    dOut.writeByte(-1);
-                    dOut.writeUTF("This server session has received: " + " send-type client connections."); // Reduce connection count, as we're only interested in reporting send type client connections
-                    dOut.flush();
+                case SocketIdentifier.CONNECTION_TEST:
+                    connectionTest() ;
                     break ;
+                case SocketIdentifier.NEW_CROSSWORD_CHECK:
+                    checkNewCrossword() ;
+                    break ;
+                case SocketIdentifier.DOWNLOAD_CROSSWORD_GRID:
+                    downloadCrosswordGrid() ;
+                    break ;
+                case SocketIdentifier.SAVE_NEW_CROSSWORD:
+                    saveNewCrossword() ;
+                    break ;
+                case SocketIdentifier.SAVE_PROGRESS:
+                    saveProgress() ;
+                    break ;
+                case SocketIdentifier.ANAGRAM:
+                    anagram() ;
+                    break ; 
+                case SocketIdentifier.WORD_FIT:
+                    wordFit() ;
+                    break ; 
                 default:
                     done = true;
             }
@@ -88,6 +110,82 @@ public class WorkerRunnable implements Runnable {
      */
     private void logConnection() {
         System.out.println("NEED TO IMPLEMENT LOGGING.");
+    }
+    
+    /**
+     * Method to handle a connection test request from a client connection.
+     * 
+     * Will send back a connection test successful byte.
+     */
+    private void connectionTest() throws IOException {
+        
+    }
+    
+    /**
+     * Method to check whether a crossword already exists in the database.
+     */
+    private void checkNewCrossword() throws IOException {
+        
+    }
+    
+    /**
+     * Method to send a crossword grid to the client. For use when they're 
+     * creating a new crossword, to save them having to input the grid.
+     */
+    private void downloadCrosswordGrid() throws IOException {
+        
+    }
+    
+    /**
+     * Method to add a new grid to the database when a client connects with a 
+     * new grid.
+     */
+    private void saveNewCrossword() throws IOException {
+        
+    }
+    
+    /**
+     * Method to save a user's progress. Receives the latest crossword save string 
+     * and writes it to disk.
+     */
+    private void saveProgress() throws IOException {
+        
+    }
+    
+    /**
+     * Process an anagram request. Receives the string to be anagrammed, and 
+     * returns the answers which fit.
+     */
+    private void anagram() throws IOException {
+        // Anagram solver instance
+        AnagramSolver as = new AnagramSolver() ;
+        // Read the input string from the data
+        String anagramString = dIn.readUTF() ;
+        // Solve the anagrams
+        ArrayList<String> answers = as.solveAnagram(anagramString);
+        
+        // Return the answers:
+        if (answers == null) {
+            // Identifier byte
+            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_FAILED);
+        } else {
+            // Identifier byte
+            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS);
+            // Number of answers
+            dOut.writeInt(answers.size());
+            // Strings
+            for (int i = 0 ; i < answers.size(); i++) {
+                dOut.writeUTF(answers.get(i));
+            }
+        }
+    }
+    
+    /**
+     * Process a word-fit request. Receives the string to be fitted, and returns
+     * all the words which fit.
+     */
+    private void wordFit() throws IOException {
+        
     }
 
 }
