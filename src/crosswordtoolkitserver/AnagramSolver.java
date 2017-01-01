@@ -33,7 +33,7 @@ import java.util.HashMap;
  */
 public class AnagramSolver {
     
-    private final String WORDS_LIST_PATH = "/res/sopwads" ;
+    private final String WORDS_LIST_PATH = "sopwads" ;
     
     private ClassLoader objClassLoader = null ;
     private HashMap<String, ArrayList<String>> dictionary = new HashMap<>() ;
@@ -54,7 +54,7 @@ public class AnagramSolver {
         
         /* try-with-resource to load the words*/
         try(BufferedReader sopwadsReader = new BufferedReader(new FileReader(objClassLoader.getResource(WORDS_LIST_PATH).getFile()))){
-            String word = null ;
+            String word ;
             while((word = sopwadsReader.readLine()) != null) {
                 String sortedLetters = sortLetters(word) ;
                 if (dictionary.containsKey(sortedLetters)) {
@@ -74,7 +74,7 @@ public class AnagramSolver {
             ex.printStackTrace();
         }
         
-        System.out.print("Done.");        
+        System.out.println("Done.");        
     }
 
     /**
@@ -94,10 +94,13 @@ public class AnagramSolver {
      * @return An ArrayList<String> of the solutions to the anagram, shoud any exist, otherwise returns null.
      */
     public ArrayList<String> solveAnagram(String inputString){
+        if (inputString.matches("")) return null ;
+        
         String sortedInputString = sortLetters(inputString) ;
         if (dictionary.containsKey(sortedInputString)) {
             return dictionary.get(sortedInputString) ;
         } else {
+            System.out.println("AnagramSolver: No anagram matches for: " + inputString);
             return null ;
         }
     }
