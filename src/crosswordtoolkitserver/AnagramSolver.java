@@ -33,61 +33,13 @@ import java.util.HashMap;
  */
 public class AnagramSolver {
     
-    private final String WORDS_LIST_PATH = "sopwads" ;
-    
-    private ClassLoader objClassLoader = null ;
-    private HashMap<String, ArrayList<String>> dictionary = new HashMap<>() ;
+    private Dictionary dic ;
    
     public AnagramSolver() {
-        // Get the class loader
-        objClassLoader = getClass().getClassLoader() ;
-        
-        readWordList() ;
-        
+        // Get a dictionary instance
+        dic = new Dictionary(Dictionary.ANAGRAM) ;
     }
-    
-    /**
-     * Method to load the wordlist into memory, specifically, storing it as entries to the HashMap
-     */
-    private void readWordList() {  
-        System.out.print("Loading dictionary...");
         
-        /* try-with-resource to load the words*/
-        try(BufferedReader sopwadsReader = new BufferedReader(new FileReader(objClassLoader.getResource(WORDS_LIST_PATH).getFile()))){
-            String word ;
-            while((word = sopwadsReader.readLine()) != null) {
-                String sortedLetters = sortLetters(word) ;
-                if (dictionary.containsKey(sortedLetters)) {
-                    // If the dictionary already has a key with the sorted letters, add the new word to the list of words for that set of letters
-                    dictionary.get(sortedLetters).add(word);
-                } else {
-                    // Otherwise, create an entry
-                    ArrayList<String> newWord = new ArrayList<>() ;
-                    newWord.add(word);
-                    dictionary.put(sortedLetters, newWord);
-                }
-            }
-
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        
-        System.out.println("Done.");        
-    }
-
-    /**
-     * Method to sort the letters of a word alphabetically, and to return them as a String
-     * @param word The word whose letters are to be sorted
-     * @return The sorted letters, recompiled as a String
-     */
-    private String sortLetters(String word){
-        char[] letters = word.toCharArray() ;
-        Arrays.sort(letters);
-        return String.valueOf(letters);
-    }
-    
     /**
      * Method to solve the anagram. 
      * @param inputString The string to be anagrammed
@@ -96,7 +48,8 @@ public class AnagramSolver {
     public ArrayList<String> solveAnagram(String inputString){
         if (inputString.matches("")) return null ;
         
-        String sortedInputString = sortLetters(inputString) ;
+        String sortedInputString = dic.sortLetters(inputString) ;
+        HashMap<String, ArrayList<String>> dictionary = dic.getAnagramDic() ;
         if (dictionary.containsKey(sortedInputString)) {
             return dictionary.get(sortedInputString) ;
         } else {

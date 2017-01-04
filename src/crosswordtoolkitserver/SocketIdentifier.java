@@ -36,7 +36,7 @@ public class SocketIdentifier {
     public static final byte SAVE_PROGRESS_SUCCESS = 41 ;
     // Anagrams
     public static final byte ANAGRAM = 100 ;
-    public static final byte ANAGRAM_SOLUTIONS_FAILED = 101 ;
+    public static final byte ANAGRAM_SOLUTIONS_EMPTY = 101 ;
     public static final byte ANAGRAM_SOLUTIONS_SUCCESS = 102 ;
     // Word fit
     public static final byte WORD_FIT = 110 ;

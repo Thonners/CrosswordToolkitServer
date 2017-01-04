@@ -16,7 +16,6 @@
  */
 package crosswordtoolkitserver;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -60,7 +59,7 @@ public class MultiThreadedServer implements Runnable {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
                 if(isStopped()) {
-                    System.out.println("Server Stopped.") ;
+                    System.out.println("MTS: Server Stopped.") ;
                     return;
                 }
                 throw new RuntimeException(
@@ -74,7 +73,7 @@ public class MultiThreadedServer implements Runnable {
             
         }
         
-        System.out.println("Server Stopped.");
+        System.out.println("MTS: Server Stopped.");
     }
 
     /**

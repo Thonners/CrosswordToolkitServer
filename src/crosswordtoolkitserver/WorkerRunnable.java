@@ -118,7 +118,10 @@ public class WorkerRunnable implements Runnable {
      * Will send back a connection test successful byte.
      */
     private void connectionTest() throws IOException {
-        
+        // Write the successful 
+        dOut.writeByte(SocketIdentifier.CONNECTION_TEST_SUCCESSFUL);
+        // Flush the data
+        dOut.flush();
     }
     
     /**
@@ -167,7 +170,7 @@ public class WorkerRunnable implements Runnable {
         // Return the answers:
         if (answers == null) {
             // Identifier byte
-            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_FAILED);
+            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_EMPTY);
         } else {
             // Identifier byte
             dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS);
@@ -178,6 +181,9 @@ public class WorkerRunnable implements Runnable {
                 dOut.writeUTF(answers.get(i));
             }
         }
+        
+        // Flush the data
+        dOut.flush();
     }
     
     /**
