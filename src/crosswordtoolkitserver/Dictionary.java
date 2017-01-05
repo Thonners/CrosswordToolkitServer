@@ -120,7 +120,8 @@ public class Dictionary {
                 
                 // if word-fit dictionary
                 if (type <= 0) {
-                    wordFitDic.get(getWordLengthIndex(word)).get(getLetterIndex(word.charAt(0))).add(word) ;
+                    int wordLengthIndex = Math.min(9,getWordLengthIndex(word)) ;
+                    wordFitDic.get(wordLengthIndex).get(getLetterIndex(word.charAt(0))).add(word) ;
                 }
             }
 
@@ -159,7 +160,7 @@ public class Dictionary {
      * @return The (length of the word) - 1 (Always returns >= 0)
      */
     private int getWordLengthIndex(String word) {
-        return Math.max(0,word.length() - 1) ; // Make sure it's never less than 0, and take 1 off the length of the word
+        return Math.max(0,(word.length() - 1)) ; // Make sure it's never less than 0, and take 1 off the length of the word
     }
     
     /**
@@ -173,9 +174,20 @@ public class Dictionary {
      * Method for use in word-fitting
      * @param wordLength The length of the unknown word
      * @param firstLetter The first letter of the unknown word
-     * @return The ArrayList containing all the words of the specified length, begninning with the specified first letter.
+     * @return The ArrayList containing all the words of the specified length, beginning with the specified first letter.
      */
     public ArrayList<String> getPossibleWords(int wordLength, char firstLetter) {
-        return wordFitDic.get(wordLength).get(firstLetter) ;
+        return getPossibleWords(wordLength, getLetterIndex(firstLetter)) ;
+    }
+    
+    /**
+     * Method for use in word-fitting
+     * @param wordLength The length of the unknown word
+     * @param firstLetterIndex The letter index of the first letter of the unknown word
+     * @return The ArrayList containing all the words of the specified length, beginning with the specified first letter.
+     */
+    public ArrayList<String> getPossibleWords(int wordLength, int firstLetterIndex) {
+        int limitedWordLength = Math.min(9, wordLength) ;
+        return wordFitDic.get(limitedWordLength).get(firstLetterIndex) ;
     }
 }
