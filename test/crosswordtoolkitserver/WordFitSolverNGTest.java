@@ -60,7 +60,8 @@ public class WordFitSolverNGTest {
         WordFitSolver instance = new WordFitSolver();
         
         // Test results
-        ArrayList result = instance.solveWordFit("");
+        ArrayList blankResult = instance.solveWordFit("");
+        ArrayList failedResult = instance.solveWordFit(".zzzzzzzz");
         ArrayList applResult = instance.solveWordFit("appl.");
         ArrayList beetrootResult = instance.solveWordFit(".eetroo.");
         
@@ -74,7 +75,8 @@ public class WordFitSolverNGTest {
         ArrayList beetrootExpResult = new ArrayList<>() ;
         beetrootExpResult.add("beetroot") ;
         
-        assertEquals(result, nullResult);
+        assertEquals(blankResult, nullResult);
+        assertEquals(failedResult, nullResult);
         assertEquals(applResult, applExpResult);
         assertEquals(beetrootResult, beetrootExpResult);
     }

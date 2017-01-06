@@ -34,7 +34,7 @@ public class WorkerRunnable implements Runnable {
     
     private DataInputStream dIn = null ;
     private DataOutputStream dOut = null ;
-    
+        
     public WorkerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket ;
     }
@@ -67,28 +67,28 @@ public class WorkerRunnable implements Runnable {
         
         boolean done = false;
         while(!done) {
-            byte messageType = dIn.readByte();
+            byte messageTypeByte = dIn.readByte();
 
-            switch(messageType) {
-                case SocketIdentifier.CONNECTION_TEST:
+            switch(SocketIdentifier.getSocketIdentifierFromByte(messageTypeByte)) {
+                case CONNECTION_TEST:
                     connectionTest() ;
                     break ;
-                case SocketIdentifier.NEW_CROSSWORD_CHECK:
+                case NEW_CROSSWORD_CHECK:
                     checkNewCrossword() ;
                     break ;
-                case SocketIdentifier.DOWNLOAD_CROSSWORD_GRID:
+                case DOWNLOAD_CROSSWORD_GRID:
                     downloadCrosswordGrid() ;
                     break ;
-                case SocketIdentifier.SAVE_NEW_CROSSWORD:
+                case SAVE_NEW_CROSSWORD:
                     saveNewCrossword() ;
                     break ;
-                case SocketIdentifier.SAVE_PROGRESS:
+                case SAVE_PROGRESS:
                     saveProgress() ;
                     break ;
-                case SocketIdentifier.ANAGRAM:
+                case ANAGRAM:
                     anagram() ;
                     break ; 
-                case SocketIdentifier.WORD_FIT:
+                case WORD_FIT:
                     wordFit() ;
                     break ; 
                 default:
@@ -119,7 +119,7 @@ public class WorkerRunnable implements Runnable {
      */
     private void connectionTest() throws IOException {
         // Write the successful 
-        dOut.writeByte(SocketIdentifier.CONNECTION_TEST_SUCCESSFUL);
+        dOut.writeByte(SocketIdentifier.CONNECTION_TEST_SUCCESSFUL.id());
         // Flush the data
         dOut.flush();
     }
@@ -136,6 +136,10 @@ public class WorkerRunnable implements Runnable {
      * creating a new crossword, to save them having to input the grid.
      */
     private void downloadCrosswordGrid() throws IOException {
+        // CrosswordLibraryManager instance
+        CrosswordLibraryManager clm = new CrosswordLibraryManager() ;
+        // Read the input string from the data
+        String gridTitle = dIn.readUTF() ;
         
     }
     
@@ -170,10 +174,10 @@ public class WorkerRunnable implements Runnable {
         // Return the answers:
         if (answers == null) {
             // Identifier byte
-            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_EMPTY);
+            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_EMPTY.id());
         } else {
             // Identifier byte
-            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS);
+            dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS.id());
             // Number of answers
             dOut.writeInt(answers.size());
             // Strings
@@ -191,7 +195,30 @@ public class WorkerRunnable implements Runnable {
      * all the words which fit.
      */
     private void wordFit() throws IOException {
+        // Word fit instance
+        WordFitSolver wfs = new WordFitSolver() ;
+        // Read the input string from the data
+        String wordFitString = dIn.readUTF() ;
+        // Solve the word fit
+        ArrayList<String> answers = wfs.solveWordFit(wordFitString) ;
         
+        // Return the answers:
+        if (answers == null) {
+            // Identifier byte
+            dOut.writeByte(SocketIdentifier.WORD_FIT_SOLUTIONS_EMPTY.id());
+        } else {
+            // Identifier byte
+            dOut.writeByte(SocketIdentifier.WORD_FIT_SOLUTIONS_SUCCESS.id());
+            // Number of answers
+            dOut.writeInt(answers.size());
+            // Strings
+            for (int i = 0 ; i < answers.size(); i++) {
+                dOut.writeUTF(answers.get(i));
+            }
+        }
+        
+        // Flush the data
+        dOut.flush();
     }
 
 }

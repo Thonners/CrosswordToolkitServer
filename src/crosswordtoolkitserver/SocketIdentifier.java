@@ -17,30 +17,56 @@
 package crosswordtoolkitserver;
 
 /**
- * Class to hold static fields to identify connection type requests
+ * Enum to identify the type of connection requested from a client, when connecting to the server.
+ * 
+ * Switch to enum over class with static final byte fields to get better compile-time checking.
  * 
  * @author M Thomas
  * @since 31/12/16
  */
-public class SocketIdentifier {
-    
+public enum SocketIdentifier {
     // Connection tests
-    public static final byte CONNECTION_TEST = 1 ;
-    public static final byte CONNECTION_TEST_SUCCESSFUL = 2 ;
+    CONNECTION_TEST((byte) 1),
+    CONNECTION_TEST_SUCCESSFUL((byte) 2),
     // New crosswords
-    public static final byte NEW_CROSSWORD_CHECK = 10 ;
-    public static final byte DOWNLOAD_CROSSWORD_GRID = 20 ;
-    public static final byte SAVE_NEW_CROSSWORD = 30 ;
+    NEW_CROSSWORD_CHECK((byte) 10),
+    DOWNLOAD_CROSSWORD_GRID((byte) 20),
+    SAVE_NEW_CROSSWORD((byte) 30),
     // Saving progress
-    public static final byte SAVE_PROGRESS = 40 ;
-    public static final byte SAVE_PROGRESS_SUCCESS = 41 ;
+    SAVE_PROGRESS((byte) 40),
+    SAVE_PROGRESS_SUCCESS((byte) 41),
     // Anagrams
-    public static final byte ANAGRAM = 100 ;
-    public static final byte ANAGRAM_SOLUTIONS_EMPTY = 101 ;
-    public static final byte ANAGRAM_SOLUTIONS_SUCCESS = 102 ;
+    ANAGRAM((byte) 100),
+    ANAGRAM_SOLUTIONS_EMPTY((byte) 101),
+    ANAGRAM_SOLUTIONS_SUCCESS((byte) 102),
     // Word fit
-    public static final byte WORD_FIT = 110 ;
-    public static final byte WORD_FIT_SOLUTIONS_FAILED = 111 ;
-    public static final byte WORD_FIT_SOLUTIONS_SUCCESS = 112 ;
+    WORD_FIT((byte) 110),
+    WORD_FIT_SOLUTIONS_EMPTY((byte) 111),
+    WORD_FIT_SOLUTIONS_SUCCESS((byte) 112);
+
+    private byte id ;
+
+    SocketIdentifier(byte id) {
+        this.id = id ;
+    }
+
+    public byte id() {
+        return id ;
+    }
     
+    /**
+     * Method to turn a byte into a SocketIdentifier
+     * @param input The byte received from the connected client
+     * @return The SocketIdentifier related to the received byte
+     */
+    public static SocketIdentifier getSocketIdentifierFromByte(byte input) {
+        for (SocketIdentifier si : SocketIdentifier.values()) {
+            if (si.id == input) {
+                return si ;
+            }
+        }
+        // If it doesn't match...
+        throw new IllegalArgumentException();
+    }
+
 }

@@ -69,7 +69,11 @@ public class WordFitSolver {
         
         System.out.println("WF: There are " + answers.size() + " answers; " + answers.toString()) ;        
         
-        return answers ;
+        if (answers.size() > 0 ) {
+            return answers ;
+        } else {
+            return null ;
+        }
         
     }
 }
