@@ -34,6 +34,8 @@ public class WorkerRunnable implements Runnable {
     
     private DataInputStream dIn = null ;
     private DataOutputStream dOut = null ;
+    
+    private CTLogger logger = null ;
         
     public WorkerRunnable(Socket clientSocket) {
         this.clientSocket = clientSocket ;
@@ -106,12 +108,13 @@ public class WorkerRunnable implements Runnable {
 
     /**
      * Method to log the connection.
-     * TODO: Implement connection logging
      */
     private void logConnection() {
-        System.out.println("NEED TO IMPLEMENT LOGGING.");
+        logger = new CTLogger(CTLogger.INFO) ;
+        String message = "New connection received from: " + clientSocket.getRemoteSocketAddress().toString() ;
+        logger.i("WorkerRunnable", message);
     }
-    
+   
     /**
      * Method to handle a connection test request from a client connection.
      * 
