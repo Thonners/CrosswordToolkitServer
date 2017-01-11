@@ -16,12 +16,7 @@
  */
 package crosswordtoolkitserver;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -43,7 +38,7 @@ public class AnagramSolver {
     /**
      * Method to solve the anagram. 
      * @param inputString The string to be anagrammed
-     * @return An ArrayList<String> of the solutions to the anagram, shoud any exist, otherwise returns null.
+     * @return An ArrayList of the solutions to the anagram, shoud any exist, otherwise returns null.
      */
     public ArrayList<String> solveAnagram(String inputString){
         if (inputString.matches("")) return null ;
