@@ -74,24 +74,31 @@ public class WorkerRunnable implements Runnable {
             switch(SocketIdentifier.getSocketIdentifierFromByte(messageTypeByte)) {
                 case CONNECTION_TEST:
                     connectionTest() ;
+                    done = true;
                     break ;
                 case NEW_CROSSWORD_CHECK:
                     checkNewCrossword() ;
+                    done = true;
                     break ;
                 case DOWNLOAD_CROSSWORD_GRID:
                     downloadCrosswordGrid() ;
+                    done = true;
                     break ;
                 case SAVE_NEW_CROSSWORD:
                     saveNewCrossword() ;
+                    done = true;
                     break ;
                 case SAVE_PROGRESS:
                     saveProgress() ;
+                    done = true;
                     break ;
                 case ANAGRAM:
                     anagram() ;
+                    done = true;
                     break ; 
                 case WORD_FIT:
                     wordFit() ;
+                    done = true;
                     break ; 
                 default:
                     done = true;
@@ -182,7 +189,7 @@ public class WorkerRunnable implements Runnable {
             // Identifier byte
             dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS.id());
             // Number of answers
-            dOut.writeInt(answers.size());
+// dont think this is required            dOut.writeInt(answers.size());
             // Strings
             for (int i = 0 ; i < answers.size(); i++) {
                 dOut.writeUTF(answers.get(i));
@@ -213,7 +220,7 @@ public class WorkerRunnable implements Runnable {
             // Identifier byte
             dOut.writeByte(SocketIdentifier.WORD_FIT_SOLUTIONS_SUCCESS.id());
             // Number of answers
-            dOut.writeInt(answers.size());
+//            dOut.writeInt(answers.size());
             // Strings
             for (int i = 0 ; i < answers.size(); i++) {
                 dOut.writeUTF(answers.get(i));

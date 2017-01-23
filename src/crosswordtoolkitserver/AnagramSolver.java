@@ -46,6 +46,7 @@ public class AnagramSolver {
         String sortedInputString = dic.sortLetters(inputString) ;
         HashMap<String, ArrayList<String>> dictionary = dic.getAnagramDic() ;
         if (dictionary.containsKey(sortedInputString)) {
+            System.out.println("Solution found for " + inputString) ;
             return dictionary.get(sortedInputString) ;
         } else {
             System.out.println("AnagramSolver: No anagram matches for: " + inputString);
