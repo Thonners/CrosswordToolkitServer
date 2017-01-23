@@ -17,6 +17,7 @@
 package crosswordtoolkitserver;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class Dictionary {
     public final static int WORD_FIT = -1 ;    
     
     // Member variables
-    private final String WORDS_LIST_PATH = "sopwads" ;    
+    private final String WORDS_LIST_PATH = "/srv/java/CrosswordToolkitServer/res/sopwads" ;    
     private ClassLoader objClassLoader = null ;
     private int type ;
     private HashMap<String, ArrayList<String>> anagramDic = null ;
@@ -100,7 +101,7 @@ public class Dictionary {
         System.out.print("Loading dictionary...");
         
         /* try-with-resource to load the words*/
-        try(BufferedReader sopwadsReader = new BufferedReader(new FileReader(objClassLoader.getResource(WORDS_LIST_PATH).getFile()))){
+        try(BufferedReader sopwadsReader = new BufferedReader(new FileReader(new File(WORDS_LIST_PATH)))){
             String word ;
             while((word = sopwadsReader.readLine()) != null) {
                 
