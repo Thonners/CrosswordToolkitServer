@@ -65,8 +65,8 @@ public class CTLogger {
         // Only log the input if the logger's level is lower or equal to that of the importance of this message
         if (level <= logLevel) {
             // Try with resources
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(logFile))) {
-                String formattedMessage = getDateTime() + ":\t" + classType + ":\t" + logMessage ;
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, true))) {
+                String formattedMessage = getDateTime() + ":\t" + classType + ":\t" + logMessage + "\n" ;
                 bw.append(formattedMessage) ;
             } catch (IOException e) {
 
