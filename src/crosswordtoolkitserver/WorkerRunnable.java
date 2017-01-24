@@ -62,7 +62,7 @@ public class WorkerRunnable implements Runnable {
     throws IOException {
         // Log the connection
         logConnection();
-        System.out.println("This server has been connected to " + " times.");
+        System.out.println("Connection opened.");
         // Input / Output data streams
         dIn = new DataInputStream(clientSocket.getInputStream());
         dOut = new DataOutputStream(clientSocket.getOutputStream()) ;
@@ -73,8 +73,10 @@ public class WorkerRunnable implements Runnable {
 
             switch(SocketIdentifier.getSocketIdentifierFromByte(messageTypeByte)) {
                 case CONNECTION_TEST:
+                    System.out.println("Connection test request.");
                     connectionTest() ;
                     done = true;
+                    System.out.println("Connection test complete.");
                     break ;
                 case NEW_CROSSWORD_CHECK:
                     checkNewCrossword() ;
@@ -93,12 +95,16 @@ public class WorkerRunnable implements Runnable {
                     done = true;
                     break ;
                 case ANAGRAM:
+                    System.out.println("Anagram request.");
                     anagram() ;
                     done = true;
+                    System.out.println("Anagram complete.");
                     break ; 
                 case WORD_FIT:
+                    System.out.println("Word-fit request.");
                     wordFit() ;
                     done = true;
+                    System.out.println("Anagram complete.");
                     break ; 
                 default:
                     done = true;
