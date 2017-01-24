@@ -194,11 +194,13 @@ public class WorkerRunnable implements Runnable {
         if (answers == null) {
             // Identifier byte
             dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_EMPTY.id());
+            System.out.println("No answers found for " + anagramString);
         } else {
             // Identifier byte
             dOut.writeByte(SocketIdentifier.ANAGRAM_SOLUTIONS_SUCCESS.id());
             // Number of answers
 // dont think this is required            dOut.writeInt(answers.size());
+            System.out.println("Found " + answers.size() + " solutions to anagram for " + anagramString) ;
             // Strings
             for (int i = 0 ; i < answers.size(); i++) {
                 dOut.writeUTF(answers.get(i));
@@ -215,7 +217,7 @@ public class WorkerRunnable implements Runnable {
      */
     private void wordFit() throws IOException {
         // Word fit instance
-        WordFitSolver wfs = new WordFitSolver() ;
+        WordFitSolver wfs = new WordFitSolver(dic) ;
         // Read the input string from the data
         String wordFitString = dIn.readUTF() ;
         // Solve the word fit

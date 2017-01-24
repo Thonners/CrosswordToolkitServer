@@ -31,9 +31,9 @@ public class WordFitSolver {
     /**
      * Constructor. Creates a word-fit specific dictionary instance.
      */
-    public WordFitSolver() {
+    public WordFitSolver(Dictionary dic) {
         // Get a dictionary instance
-        dic = new Dictionary(Dictionary.WORD_FIT) ;
+        this.dic = dic ;
     }
     
     public ArrayList<String> solveWordFit(String inputString) {
