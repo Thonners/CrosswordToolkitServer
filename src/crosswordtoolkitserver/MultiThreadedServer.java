@@ -33,6 +33,8 @@ public class MultiThreadedServer implements Runnable {
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
     
+    private final Dictionary dictionary = new Dictionary() ;
+    
     /**
      * Constructor
      * @param port The port on which to listen for incoming connections
@@ -67,8 +69,7 @@ public class MultiThreadedServer implements Runnable {
             }
             // Start a new thread to deal with the connection
             new Thread(
-                new WorkerRunnable(
-                    clientSocket)
+                new WorkerRunnable(clientSocket, dictionary)
             ).start();
             
         }

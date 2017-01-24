@@ -32,13 +32,16 @@ public class WorkerRunnable implements Runnable {
     
     protected Socket clientSocket = null;
     
+    private Dictionary dic ;
+    
     private DataInputStream dIn = null ;
     private DataOutputStream dOut = null ;
     
     private CTLogger logger = null ;
         
-    public WorkerRunnable(Socket clientSocket) {
+    public WorkerRunnable(Socket clientSocket, Dictionary dic) {
         this.clientSocket = clientSocket ;
+        this.dic = dic ;
     }
     
     @Override
@@ -181,7 +184,7 @@ public class WorkerRunnable implements Runnable {
      */
     private void anagram() throws IOException {
         // Anagram solver instance
-        AnagramSolver as = new AnagramSolver() ;
+        AnagramSolver as = new AnagramSolver(dic) ;
         // Read the input string from the data
         String anagramString = dIn.readUTF() ;
         // Solve the anagrams

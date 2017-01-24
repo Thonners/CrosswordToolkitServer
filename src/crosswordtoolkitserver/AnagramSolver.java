@@ -30,9 +30,10 @@ public class AnagramSolver {
     
     private Dictionary dic ;
    
-    public AnagramSolver() {
+    public AnagramSolver(Dictionary dic) {
         // Get a dictionary instance
-        dic = new Dictionary(Dictionary.ANAGRAM) ;
+        //dic = new Dictionary(Dictionary.ANAGRAM) ;
+        this.dic = dic ;
     }
         
     /**
